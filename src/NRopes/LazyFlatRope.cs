@@ -1,4 +1,5 @@
-﻿namespace NRopes {    using System;
+﻿namespace NRopes {
+    using System;
     using System.Collections.Generic;
 
     public sealed class LazyFlatRope : Rope {
