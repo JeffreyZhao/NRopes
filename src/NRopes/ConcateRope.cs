@@ -5,6 +5,13 @@
     using System.Text;
 
     public sealed class ConcateRope : Rope, IStringBuilderPreferable {
+        internal const int MaxDepth = 31;
+
+        private static int GetDepth(Rope rope) {
+            var concateRope = rope as ConcateRope;
+            return concateRope == null ? 0 : concateRope.Depth;
+        }
+
         private readonly Rope _left;
         private readonly Rope _right;
         private readonly int _length;
@@ -14,11 +21,19 @@
             if (left == null) throw new ArgumentNullException("left");
             if (right == null) throw new ArgumentNullException("right");
 
+            _depth = Math.Max(GetDepth(left), GetDepth(right)) + 1;
+            if (_depth > MaxDepth) {
+                throw new ArgumentException(
+                    String.Format("The result tree of rope cannot be over {0} in depth.", MaxDepth));
+            }
+
             _left = left;
             _right = right;
-
             _length = left.Length + right.Length;
-            _depth = Math.Max(left.Depth, right.Depth) + 1;
+        }
+
+        public int Depth {
+            get { return _depth; }
         }
 
         public Rope Left {
@@ -31,10 +46,6 @@
 
         public override int Length {
             get { return _length; }
-        }
-
-        public override int Depth {
-            get { return _depth; }
         }
 
         public override Rope ConcateWith(Rope rope) {

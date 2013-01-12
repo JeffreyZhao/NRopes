@@ -127,10 +127,6 @@
             _delegate = _delegate.Evaluate();
         }
 
-        public override int Depth {
-            get { return 0; }
-        }
-
         public override Rope Substring(int startIndex, int length) {
             return base.Substring(startIndex, length) ?? _delegate.Substring(startIndex, length);
         }

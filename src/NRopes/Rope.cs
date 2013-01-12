@@ -10,10 +10,6 @@
                 get { return 0; }
             }
 
-            public override int Depth {
-                get { return 0; }
-            }
-
             public override IEnumerator<char> GetEnumerator() {
                 return Enumerable.Empty<char>().GetEnumerator();
             }
@@ -37,8 +33,6 @@
         }
 
         public abstract int Length { get; }
-
-        public abstract int Depth { get; }
 
         public virtual Rope ConcateWith(Rope rope) {
             if (rope == null) throw new ArgumentNullException("rope");

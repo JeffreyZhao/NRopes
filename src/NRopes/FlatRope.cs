@@ -16,10 +16,6 @@
             get { return _str.Length; }
         }
 
-        public override int Depth {
-            get { return 0; }
-        }
-
         public override Rope Substring(int startIndex, int length) {
             return base.Substring(startIndex, length) ?? new FlatRope(_str.Substring(startIndex, length));
         }
