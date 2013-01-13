@@ -1,41 +1,15 @@
 ﻿namespace NRopes.Tests {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using FluentAssertions;
     using Xunit;
-    using System.Diagnostics;
 
     public class ConcateRopeTests : RopeTestsBase {
         private static int Fib(int n) {
             if (n <= 2) return 1;
 
             return Fib(n - 1) + Fib(n - 2);
-        }
-
-        protected override IEnumerable<Rope> TargetRopes {
-            get { yield return new ConcateRope(new FlatRope("A"), new FlatRope("B")); }
-        }
-
-        [Fact]
-        public void ConstructorShouldThrowIfEitherChildIsNull() {
-            new Action(() => new ConcateRope(null, new FlatRope("A")))
-                .ShouldThrow<ArgumentNullException>().And
-                .ParamName.Should().Be("left");
-
-            new Action(() => new ConcateRope(new FlatRope("B"), null))
-                .ShouldThrow<ArgumentNullException>().And
-                .ParamName.Should().Be("right");
-        }
-
-        [Fact]
-        public void SimplePropertiesShouldBeRight() {
-            var hwRope = new ConcateRope(new FlatRope("Hello "), new FlatRope("World"));
-            hwRope.Depth.Should().Be(1);
-
-            var rope = new ConcateRope(new FlatRope("Say "), hwRope);
-            rope.Depth.Should().Be(2);
-            rope.Length.Should().Be("Say Hello World".Length);
-            rope.ToString().Should().Be("Say Hello World");
         }
 
         private static ConcateRope CreateRope(int depth, int length) {
@@ -62,6 +36,32 @@
             Debug.Assert(concateRope.Length == length);
 
             return concateRope;
+        }
+
+        protected override IEnumerable<Rope> TargetRopes {
+            get { yield return new ConcateRope(new FlatRope("A"), new FlatRope("B")); }
+        }
+
+        [Fact]
+        public void ConstructorShouldThrowIfEitherChildIsNull() {
+            new Action(() => new ConcateRope(null, new FlatRope("A")))
+                .ShouldThrow<ArgumentNullException>().And
+                .ParamName.Should().Be("left");
+
+            new Action(() => new ConcateRope(new FlatRope("B"), null))
+                .ShouldThrow<ArgumentNullException>().And
+                .ParamName.Should().Be("right");
+        }
+
+        [Fact]
+        public void SimplePropertiesShouldBeRight() {
+            var hwRope = new ConcateRope(new FlatRope("Hello "), new FlatRope("World"));
+            hwRope.Depth.Should().Be(1);
+
+            var rope = new ConcateRope(new FlatRope("Say "), hwRope);
+            rope.Depth.Should().Be(2);
+            rope.Length.Should().Be("Say Hello World".Length);
+            rope.ToString().Should().Be("Say Hello World");
         }
 
         [Fact]
