@@ -10,19 +10,19 @@
         [Fact]
         public void SubstringShouldThrowExceptionsForInvalidParameters() {
             foreach (var rope in TargetRopes) {
-                rope.Do(r => r.Substring(-1))
+                rope.Invoking(r => r.Substring(-1))
                     .ShouldThrow<ArgumentOutOfRangeException>().And
                     .ParamName.Should().Be("startIndex");
 
-                rope.Do(r => r.Substring(r.Length + 1))
+                rope.Invoking(r => r.Substring(r.Length + 1))
                     .ShouldThrow<ArgumentOutOfRangeException>().And
                     .ParamName.Should().Be("startIndex");
 
-                rope.Do(r => r.Substring(0, -1))
+                rope.Invoking(r => r.Substring(0, -1))
                     .ShouldThrow<ArgumentOutOfRangeException>().And
                     .ParamName.Should().Be("length");
 
-                rope.Do(r => r.Substring(0, r.Length + 1))
+                rope.Invoking(r => r.Substring(0, r.Length + 1))
                     .ShouldThrow<ArgumentOutOfRangeException>().And
                     .ParamName.Should().Be("length");
             }
