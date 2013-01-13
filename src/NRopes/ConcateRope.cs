@@ -5,7 +5,29 @@
     using System.Text;
 
     public sealed class ConcateRope : Rope, IStringBuilderPreferable {
-        internal const int MaxDepth = 31;
+        private const int MaxDepth = 31;
+
+        public int FlattenRightChildLengthLimit = 10;
+
+        /// <summary>
+        /// Start from the 3nd fib numbers.
+        /// </summary>
+        private static readonly int[] Fibs;
+
+        static ConcateRope() {
+            Fibs = new int[MaxDepth];
+
+            Fibs[0] = 2; // fib(3)
+            Fibs[1] = 3; // fib(4)
+
+            for (var i = 2; i < MaxDepth; i++) {
+                Fibs[i] = Fibs[i - 2] + Fibs[i - 1];
+            }
+        }
+
+        private static int GetMinLength(int depth) {
+            return Fibs[depth - 1];
+        }
 
         private static int GetDepth(Rope rope) {
             var concateRope = rope as ConcateRope;
@@ -51,17 +73,19 @@
         public override Rope ConcateWith(Rope rope) {
             if (rope == null) throw new ArgumentNullException("rope");
 
+            var limit = FlattenRightChildLengthLimit;
+
             var flatRope = rope as FlatRope;
-            if (flatRope == null || flatRope.Length > 10) {
+            if (flatRope == null || flatRope.Length > limit) {
                 return base.ConcateWith(rope);
             }
 
             var rightRope = _right as FlatRope;
-            if (rightRope == null || rightRope.Length > 10) {
+            if (rightRope == null || rightRope.Length > limit) {
                 return base.ConcateWith(rope);
             }
 
-            if (flatRope.Length + rightRope.Length > 10) {
+            if (flatRope.Length + rightRope.Length > limit) {
                 return base.ConcateWith(rope);
             }
 
@@ -95,10 +119,10 @@
         }
 
         public bool IsBalanced {
-            get { throw new NotImplementedException(); }
+            get { return Length >= GetMinLength(_depth); }
         }
 
-        public ConcateRope Rebalance() {
+        public Rope Rebalance() {
             throw new NotImplementedException();
         }
 

@@ -21,10 +21,6 @@
 
         public static readonly Rope Empty = new EmptyRope();
 
-        public static bool IsNullOrEmpty(Rope rope) {
-            return rope == null || rope.Length == 0;
-        }
-
         public static Rope Concate(Rope left, Rope right) {
             if (left == null) return right ?? Empty;
             if (right == null) return left;
